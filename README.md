@@ -1,25 +1,26 @@
 Springboard Capstone Project
 ----------------------------
 
-Springboard Capstone Project for introduction to Data Science Course
+Springboard Capstone Project for The Introduction to Data Science Course
 
 Problem
 -------
 
-The goal of this project is to analyze taxi fare logs to be able to
-predict a trip's fare knowing the pickup location, the drop off
-location, the date and the time of the ride. In addition to that, we
-could compare the yellow taxi fares to the green taxi fares and see how
-or if the limitations of the green taxi affect their fares. It would
-also be interesting to check the fare changes compared to certain events
-(subway strikes, holidays, new private taxi companies like uber or lyft,
-weekdays vs weekends)
+The purpose of this project is to analyze taxi fare logs and provide
+actionable results to the companies. I will create models that predict a
+trip's fare based on the taxis pickup location, the drop off location,
+the date and the time of the ride. In addition to that, I am going to
+compare the yellow taxi and the green taxi companies. The green taxis
+have limitations in their operations and I want to see how it affects
+their fares. It would also be interesting to check the fare changes
+compared to certain events (subway strikes, holidays, new private taxi
+companies like uber or lyft, weekdays vs weekends)
 
 Client
 ------
 
-The analysis would allow Taxi companies to predict how fares would
-change considering uncontrolled events
+The analysis that I am providing would allow Taxi companies to predict
+their fares
 
 Data
 ----
@@ -37,7 +38,8 @@ Approach
 -   Define all interesting variables
 -   Collect yellow taxi fares data in Python
 -   Collect green taxi fares data in Python
--   Farm fingerprint both of the datasets
+-   Reproducibly randomly select 50,000 records using the farm
+    fingerprint functionality
 -   Output csv files of the sample data
 -   Clean and wrangle the data in R
 -   Exploratory phase
