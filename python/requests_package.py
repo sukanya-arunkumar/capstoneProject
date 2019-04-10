@@ -10,7 +10,9 @@ def query_trips(type, postFix = ""):
     query_job = client.query("""
     SELECT *
     FROM [nyc-tlc:""" + type + """.trips""" + postFix + """]
-    LIMIT 10    """,
+    WHERE ABS(FARM_FINGERPRINT(CONCAT(STRING(pickup_longitude) ,STRING(pickup_latitude) ,STRING(pickup_datetime),STRING( dropoff_datetime)))) % 10 < 8
+    LIMIT 50000
+    """,
     job_config = job_config)
 
     results = query_job.result().to_dataframe()  # Waits for job to complete.
