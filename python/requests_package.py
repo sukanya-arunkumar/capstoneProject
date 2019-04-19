@@ -11,7 +11,10 @@ def query_trips(type, postFix, year):
     SELECT *
     FROM
     (SELECT * FROM
-     [nyc-tlc:""" + type + """.trips""" + postFix + """] WHERE YEAR( pickup_datetime ) = """ + year + """ AND pickup_latitude <> 0 AND pickup_longitude <> 0 AND dropoff_latitude <> 0 AND dropoff_longitude <> 0 AND trip_distance > 0 AND fare_amount > 0)
+    [nyc-tlc:""" + type + """.trips""" + postFix + """] WHERE YEAR( pickup_datetime ) = """ + year + """ 
+    AND pickup_latitude <> 0 AND pickup_longitude <> 0 
+    AND dropoff_latitude <> 0 AND dropoff_longitude <> 0 
+    AND trip_distance > 0 AND fare_amount > 0)
     WHERE ABS(FARM_FINGERPRINT(STRING(pickup_datetime))) % 10 < 8
     LIMIT 50000
     """,

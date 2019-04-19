@@ -48,8 +48,8 @@ all rows with a distance higher than 100miles.
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-4-1.png)
 
-Displaying the pickup longitude and latitude on New York city using
-`ggmap`
+Displaying the pickup longitude and latitude of yellow taxi 2014 on New
+York city using `ggmap`
 
     register_google(key="AIzaSyDOHYjR93Vi0ols4DpE88pdPOppaO_aShg")
     ggmap(get_map("New York",
@@ -67,3 +67,46 @@ Displaying the pickup longitude and latitude on New York city using
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-5-1.png)
+
+Running the same as above on the yellow 2015 data will result in the
+following error
+
+    yellowData2015 <- yellowData2015  %>% mutate(
+      distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+    )
+    Error in .pointsToMatrix(y) : longitude < -360
+
+I had to remove all latitude and longitude values that are not within
+the maximum bounds \* Latitude: -85 to +85 \* Longitude: -180 to +180
+
+    yellowData2015 <- yellowData2015[yellowData2015$pickup_latitude >= -85 & yellowData2015$pickup_latitude <= 85,]
+    yellowData2015 <- yellowData2015[yellowData2015$pickup_longitude >= -180 & yellowData2015$pickup_longitude <= 180,]
+
+Running the same script again would display the following plot
+![](README_files/figure-markdown_strict/unnamed-chunk-8-1.png)
+
+Displaying the pickup longitude and latitude of yellow taxi 2015 on New
+York city using `ggmap`
+
+    ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=12&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
+
+    ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
+
+![](README_files/figure-markdown_strict/unnamed-chunk-9-1.png) I repeat
+the same process on the green taxi data-sets Green taxi 2014
+![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)![](README_files/figure-markdown_strict/unnamed-chunk-10-2.png)
+
+    ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
+
+    ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
+
+![](README_files/figure-markdown_strict/unnamed-chunk-10-3.png)
+
+Green taxi 2015
+![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)![](README_files/figure-markdown_strict/unnamed-chunk-11-2.png)
+
+    ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
+
+    ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
+
+![](README_files/figure-markdown_strict/unnamed-chunk-11-3.png)

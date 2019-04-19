@@ -61,11 +61,11 @@ plot <- ggplot(yellowData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
 plot
 ```
 
-Displaying the pickup longitude and latitude on New York city using `ggmap`
+Displaying the pickup longitude and latitude of yellow taxi 2014 on New York city using `ggmap`
 
 ```{r}
 
-register_google(key=[GoogleMapsKey])
+register_google(key=[key])
 ggmap(get_map("New York",
               zoom = 12, scale = "auto",
               source = "google"),
@@ -75,4 +75,181 @@ ggmap(get_map("New York",
                data=yellowData2014, 
                col="red", alpha=0.2
 )
+```
+
+Running the same as above on the yellow 2015 data will result in the following error
+```
+yellowData2015 <- yellowData2015  %>% mutate(
+  distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+)
+Error in .pointsToMatrix(y) : longitude < -360
+```
+
+I had to remove all latitude and longitude values that are not within the maximum bounds
+* Latitude: -85 to +85
+* Longitude: -180 to +180
+
+```{r, echo=FALSE}
+yellowData2015 <- read.csv('../yellow_2015.csv', stringsAsFactors = FALSE)
+
+min_lat <- min(yellowData2015$pickup_latitude)
+max_lat <- max(yellowData2015$pickup_latitude)
+min_long <- min(yellowData2015$pickup_longitude)
+max_long <- max(yellowData2015$pickup_longitude)
+```
+```{r}
+yellowData2015 <- yellowData2015[yellowData2015$pickup_latitude >= -85 & yellowData2015$pickup_latitude <= 85,]
+yellowData2015 <- yellowData2015[yellowData2015$pickup_longitude >= -180 & yellowData2015$pickup_longitude <= 180,]
+```
+
+Running the same script again would display the following plot
+```{r, echo=FALSE}
+
+  yellowData2015 <- yellowData2015  %>% mutate(
+    distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+  )
+  
+  yellowData2015 <- yellowData2015[yellowData2015$distance_from_center < 100,]
+
+  yellowData2015$pickup_latitude <-  round(yellowData2015$pickup_latitude, 4)
+  yellowData2015$pickup_longitude <-  round(yellowData2015$pickup_longitude, 4)
+  
+  min_lat <- min(yellowData2015$pickup_latitude)
+  max_lat <- max(yellowData2015$pickup_latitude)
+  min_long <- min(yellowData2015$pickup_longitude)
+  max_long <- max(yellowData2015$pickup_longitude)
+  
+  plot <- ggplot(yellowData2015, aes(x=pickup_longitude, y=pickup_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+ 
+```
+
+Displaying the pickup longitude and latitude of yellow taxi 2015 on New York city using `ggmap`
+
+```{r, echo=FALSE}
+  ggmap(get_map("New York",
+                zoom = 12, scale = "auto",
+                source = "google"),
+        extent="device",
+        legend="topright"
+  ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+                 data=yellowData2015, 
+                 col="red", alpha=0.2
+  )
+```
+I repeat the same process on the green taxi data-sets
+Green taxi 2014
+```{r, echo=FALSE}
+  greenData2014 <- read.csv('../green_2014.csv', stringsAsFactors = FALSE)
+  min_lat <- min(greenData2014$pickup_latitude)
+  max_lat <- max(greenData2014$pickup_latitude)
+  min_long <- min(greenData2014$pickup_longitude)
+  max_long <- max(greenData2014$pickup_longitude)
+  
+  plot <- ggplot(greenData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  greenData2014 <- greenData2014[greenData2014$pickup_latitude >= -85 & greenData2014$pickup_latitude <= 85,]
+  greenData2014 <- greenData2014[greenData2014$pickup_longitude >= -180 & greenData2014$pickup_longitude <= 180,]
+  
+  #calculate distance to new york lat lng
+  newYorkLatLng = c(-73.935242, 40.730610)
+  greenData2014 <- greenData2014  %>% mutate(
+    distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+  )
+  
+  #remove all rows with a distance greater than 100 miles
+  greenData2014 <- greenData2014[greenData2014$distance_from_center < 100,]
+  
+  #round longitude and latitude with a 4 precision
+  greenData2014$pickup_latitude <-  round(greenData2014$pickup_latitude, 4)
+  greenData2014$pickup_longitude <-  round(greenData2014$pickup_longitude, 4)
+  
+  # set ggplot limits
+  min_lat <- min(greenData2014$pickup_latitude)
+  max_lat <- max(greenData2014$pickup_latitude)
+  min_long <- min(greenData2014$pickup_longitude)
+  max_long <- max(greenData2014$pickup_longitude)
+  
+  plot <- ggplot(greenData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  # draw pickup data on google maps
+  ggmap(get_map("New York",
+                zoom = 10, scale = "auto",
+                source = "google"),
+        extent="device",
+        legend="topright"
+  ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+                 data=greenData2014, 
+                 col="red", alpha=0.2
+  ) 
+```
+
+Green taxi 2015
+```{r, echo=FALSE}
+  greenData2015 <- read.csv('../green_2015.csv', stringsAsFactors = FALSE)
+  min_lat <- min(greenData2015$pickup_latitude)
+  max_lat <- max(greenData2015$pickup_latitude)
+  min_long <- min(greenData2015$pickup_longitude)
+  max_long <- max(greenData2015$pickup_longitude)
+  
+  plot <- ggplot(greenData2015, aes(x=pickup_longitude, y=pickup_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  greenData2015 <- greenData2015[greenData2015$pickup_latitude >= -85 & greenData2014$pickup_latitude <= 85,]
+  greenData2015 <- greenData2015[greenData2015$pickup_longitude >= -180 & greenData2014$pickup_longitude <= 180,]
+  
+  #calculate distance to new york lat lng
+  newYorkLatLng = c(-73.935242, 40.730610)
+  greenData2015 <- greenData2015  %>% mutate(
+    distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+  )
+  
+  #remove all rows with a distance greater than 100 miles
+  greenData2015 <- greenData2015[greenData2015$distance_from_center < 100,]
+  
+  #round longitude and latitude with a 4 precision
+  greenData2015$pickup_latitude <-  round(greenData2015$pickup_latitude, 4)
+  greenData2015$pickup_longitude <-  round(greenData2015$pickup_longitude, 4)
+  
+  # set ggplot limits
+  min_lat <- min(greenData2015$pickup_latitude)
+  max_lat <- max(greenData2015$pickup_latitude)
+  min_long <- min(greenData2015$pickup_longitude)
+  max_long <- max(greenData2015$pickup_longitude)
+  
+  plot <- ggplot(greenData2015, aes(x=pickup_longitude, y=pickup_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  # draw pickup data on google maps
+  ggmap(get_map("New York",
+                zoom = 10, scale = "auto",
+                source = "google"),
+        extent="device",
+        legend="topright"
+  ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+                 data=greenData2015, 
+                 col="red", alpha=0.2
+  )
 ```
