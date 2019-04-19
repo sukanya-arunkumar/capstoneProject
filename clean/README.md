@@ -12,7 +12,7 @@ Query](https://bigquery.cloud.google.com) and creates four csv files \*
 [green\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
 
 Since I'm dealing with a large dataset, dropping empty fields rows will
-not impact my modal. In fact, I will be able to create a more truthfull
+not impact my modal. In fact, I will be able to create a more truthful
 analysis and prediction modal. That's why, I decided to drop the records
 with missing fields like pickup\_longitude, pickup\_latitude,
 dropoff\_longitude, dropoff\_latitude, fare\_amount, trip\_distance and

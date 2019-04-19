@@ -20,7 +20,7 @@ The python scripts read the data from [Google Big Query](https://bigquery.cloud.
 * [green_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
 * [green_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
 
-Since I'm dealing with a large dataset, dropping empty fields rows will not impact my modal. In fact, I will be able to create a more truthfull analysis and prediction modal.
+Since I'm dealing with a large dataset, dropping empty fields rows will not impact my modal. In fact, I will be able to create a more truthful analysis and prediction modal.
 That's why, I decided to drop the records with missing fields like pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, fare_amount, trip_distance and pickup_datetime.
 
 As a first step, I decided to visualize the selected pickup_longitude and pickup_latitude using the `ggplot` library.
