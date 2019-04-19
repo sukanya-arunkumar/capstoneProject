@@ -15,9 +15,13 @@ library(geosphere)
 ## CLEAN DATA
 
 The python scripts read the data from [Google Big Query](https://bigquery.cloud.google.com) and creates four csv files
+
 * [yellow_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2014.csv)
+
 * [yellow_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2015.csv)
+
 * [green_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
+
 * [green_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
 
 Since I'm dealing with a large dataset, dropping empty fields rows will not impact my modal. In fact, I will be able to create a more truthful analysis and prediction modal.
@@ -141,21 +145,17 @@ Displaying the pickup longitude and latitude of yellow taxi 2015 on New York cit
                  col="red", alpha=0.2
   )
 ```
+
 I repeat the same process on the green taxi data-sets
+
 Green taxi 2014
+
 ```{r, echo=FALSE}
   greenData2014 <- read.csv('../green_2014.csv', stringsAsFactors = FALSE)
   min_lat <- min(greenData2014$pickup_latitude)
   max_lat <- max(greenData2014$pickup_latitude)
   min_long <- min(greenData2014$pickup_longitude)
   max_long <- max(greenData2014$pickup_longitude)
-  
-  plot <- ggplot(greenData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
-    geom_point(size=0.06) +
-    scale_x_continuous(limits=c(min_long, max_long)) +
-    scale_y_continuous(limits=c(min_lat, max_lat)) 
-  
-  plot
   
   greenData2014 <- greenData2014[greenData2014$pickup_latitude >= -85 & greenData2014$pickup_latitude <= 85,]
   greenData2014 <- greenData2014[greenData2014$pickup_longitude >= -180 & greenData2014$pickup_longitude <= 180,]
@@ -198,21 +198,17 @@ Green taxi 2014
   ) 
 ```
 
+
 Green taxi 2015
+
+
 ```{r, echo=FALSE}
   greenData2015 <- read.csv('../green_2015.csv', stringsAsFactors = FALSE)
   min_lat <- min(greenData2015$pickup_latitude)
   max_lat <- max(greenData2015$pickup_latitude)
   min_long <- min(greenData2015$pickup_longitude)
   max_long <- max(greenData2015$pickup_longitude)
-  
-  plot <- ggplot(greenData2015, aes(x=pickup_longitude, y=pickup_latitude)) +
-    geom_point(size=0.06) +
-    scale_x_continuous(limits=c(min_long, max_long)) +
-    scale_y_continuous(limits=c(min_lat, max_lat)) 
-  
-  plot
-  
+
   greenData2015 <- greenData2015[greenData2015$pickup_latitude >= -85 & greenData2014$pickup_latitude <= 85,]
   greenData2015 <- greenData2015[greenData2015$pickup_longitude >= -180 & greenData2014$pickup_longitude <= 180,]
   

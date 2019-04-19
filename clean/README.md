@@ -92,21 +92,26 @@ York city using `ggmap`
 
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
-![](README_files/figure-markdown_strict/unnamed-chunk-9-1.png) I repeat
-the same process on the green taxi data-sets Green taxi 2014
-![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)![](README_files/figure-markdown_strict/unnamed-chunk-10-2.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-9-1.png)
+
+I repeat the same process on the green taxi data-sets
+
+Green taxi 2014
+
+![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
     ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
 
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
-![](README_files/figure-markdown_strict/unnamed-chunk-10-3.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-10-2.png)
 
 Green taxi 2015
-![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)![](README_files/figure-markdown_strict/unnamed-chunk-11-2.png)
+
+![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
 
     ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
 
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
-![](README_files/figure-markdown_strict/unnamed-chunk-11-3.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-11-2.png)
