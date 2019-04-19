@@ -1,0 +1,78 @@
+---
+title: "clean"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
+library(tidyr)
+library(dplyr)
+library(ggplot2) 
+library(ggmap)
+library(geosphere)
+```
+
+## CLEAN DATA
+
+The python scripts read the data from [Google Big Query](https://bigquery.cloud.google.com) and creates four csv files
+* [yellow_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2014.csv)
+* [yellow_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2015.csv)
+* [green_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
+* [green_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
+
+Since I'm dealing with a large dataset, dropping empty fields rows will not impact my modal. In fact, I will be able to create a more truthfull analysis and prediction modal.
+That's why, I decided to drop the records with missing fields like pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, fare_amount, trip_distance and pickup_datetime.
+
+As a first step, I decided to visualize the selected pickup_longitude and pickup_latitude using the `ggplot` library.
+
+```{r}
+yellowData2014 <- read.csv('../yellow_2014.csv', stringsAsFactors = FALSE)
+plot <- ggplot(yellowData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
+  geom_point(size=0.06)
+plot
+```
+
+As you can see, it appears that some locations are way off. To remove those records from the dataset, I calculated the distance as the Crow Flies of each pickup location to the center of New York City and removed all rows with a distance higher than 100miles.
+
+```{r}
+newYorkLatLng = c(-73.935242, 40.730610)
+yellowData2014 <- yellowData2014  %>% mutate(
+  distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), pickup_longitude, pickup_latitude)/ 1609
+)
+yellowData2014 <- yellowData2014[yellowData2014$distance_from_center < 100,]
+```
+
+```{r, echo=FALSE}
+yellowData2014$pickup_latitude <-  round(yellowData2014$pickup_latitude, 4)
+yellowData2014$pickup_longitude <-  round(yellowData2014$pickup_longitude, 4)
+
+min_lat <- min(yellowData2014$pickup_latitude)
+max_lat <- max(yellowData2014$pickup_latitude)
+min_long <- min(yellowData2014$pickup_longitude)
+max_long <- max(yellowData2014$pickup_longitude)
+```
+
+```{r}
+plot <- ggplot(yellowData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
+  geom_point(size=0.06) +
+  scale_x_continuous(limits=c(min_long, max_long)) +
+  scale_y_continuous(limits=c(min_lat, max_lat)) 
+
+plot
+```
+
+Displaying the pickup longitude and latitude on New York city using `ggmap`
+
+```{r}
+
+register_google(key=[GoogleMapsKey])
+ggmap(get_map("New York",
+              zoom = 12, scale = "auto",
+              source = "google"),
+      extent="device",
+      legend="topright"
+) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+               data=yellowData2014, 
+               col="red", alpha=0.2
+)
+```

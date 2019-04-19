@@ -5,13 +5,26 @@ library(ggmap)
 library(geosphere)
 
 #load yellow and green datasets
-yellowData2014 <- read.csv('./yellow_2014.csv', stringsAsFactors = FALSE)
-yellowData2015 <- read.csv('./yellow_2014.csv', stringsAsFactors = FALSE)
+yellowData2014 <- read.csv('../yellow_2014.csv', stringsAsFactors = FALSE)
+yellowData2015 <- read.csv('../yellow_2015.csv', stringsAsFactors = FALSE)
 
-greenData2014 <- read.csv('./yellow_2014.csv', stringsAsFactors = FALSE)
-greenData2015 <- read.csv('./yellow_2014.csv', stringsAsFactors = FALSE)
+greenData2014 <- read.csv('../green_2014.csv', stringsAsFactors = FALSE)
+greenData2015 <- read.csv('../green_2015.csv', stringsAsFactors = FALSE)
 
-View(yellowData2014)
+# set ggplot limits
+min_lat <- min(yellowData2014$pickup_latitude)
+max_lat <- max(yellowData2014$pickup_latitude)
+min_long <- min(yellowData2014$pickup_longitude)
+max_long <- max(yellowData2014$pickup_longitude)
+
+plot <- ggplot(yellowData2014, aes(x=pickup_longitude, y=pickup_latitude)) +
+  geom_point(size=0.06) +
+  scale_x_continuous(limits=c(min_long, max_long)) +
+  scale_y_continuous(limits=c(min_lat, max_lat)) 
+
+plot
+
+
 
 #calculate distance to new york lat lng
 newYorkLatLng = c(-73.935242, 40.730610)
@@ -48,9 +61,9 @@ ggmap(get_map("New York",
       extent="device",
       legend="topright"
 ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
-             data=data, 
-             col="red", alpha=0.2
-  ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
-             data= yellowData2014[yellowData2014$fare_amount < 3,], 
-             col="blue", alpha=0.2
+               data=data, 
+               col="red", alpha=0.2
+) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+               data= yellowData2014[yellowData2014$fare_amount < 3,], 
+               col="blue", alpha=0.2
 )
