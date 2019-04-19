@@ -16,13 +16,10 @@ library(geosphere)
 
 The python scripts read the data from [Google Big Query](https://bigquery.cloud.google.com) and creates four csv files
 
-* [yellow_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2014.csv)
-
-* [yellow_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2015.csv)
-
-* [green_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
-
-* [green_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
+[yellow_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2014.csv)
+[yellow_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2015.csv)
+[green_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
+[green_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
 
 Since I'm dealing with a large dataset, dropping empty fields rows will not impact my modal. In fact, I will be able to create a more truthful analysis and prediction modal.
 That's why, I decided to drop the records with missing fields like pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, fare_amount, trip_distance and pickup_datetime.
@@ -107,6 +104,7 @@ yellowData2015 <- yellowData2015[yellowData2015$pickup_longitude >= -180 & yello
 ```
 
 Running the same script again would display the following plot
+
 ```{r, echo=FALSE}
 
   yellowData2015 <- yellowData2015  %>% mutate(
@@ -185,7 +183,10 @@ Green taxi 2014
     scale_y_continuous(limits=c(min_lat, max_lat)) 
   
   plot
-  
+```
+
+```{r}
+
   # draw pickup data on google maps
   ggmap(get_map("New York",
                 zoom = 10, scale = "auto",
@@ -197,7 +198,6 @@ Green taxi 2014
                  col="red", alpha=0.2
   ) 
 ```
-
 
 Green taxi 2015
 
@@ -237,7 +237,9 @@ Green taxi 2015
     scale_y_continuous(limits=c(min_lat, max_lat)) 
   
   plot
-  
+```
+```{r}
+
   # draw pickup data on google maps
   ggmap(get_map("New York",
                 zoom = 10, scale = "auto",

@@ -2,13 +2,11 @@ CLEAN DATA
 ----------
 
 The python scripts read the data from [Google Big
-Query](https://bigquery.cloud.google.com) and creates four csv files \*
+Query](https://bigquery.cloud.google.com) and creates four csv files
+
 [yellow\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2014.csv)
-\*
 [yellow\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/yellow_2015.csv)
-\*
 [green\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2014.csv)
-\*
 [green\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/green_2015.csv)
 
 Since I'm dealing with a large dataset, dropping empty fields rows will
@@ -51,7 +49,7 @@ all rows with a distance higher than 100miles.
 Displaying the pickup longitude and latitude of yellow taxi 2014 on New
 York city using `ggmap`
 
-    register_google(key="AIzaSyDOHYjR93Vi0ols4DpE88pdPOppaO_aShg")
+    register_google(key=[key])
     ggmap(get_map("New York",
                   zoom = 12, scale = "auto",
                   source = "google"),
@@ -83,6 +81,7 @@ the maximum bounds \* Latitude: -85 to +85 \* Longitude: -180 to +180
     yellowData2015 <- yellowData2015[yellowData2015$pickup_longitude >= -180 & yellowData2015$pickup_longitude <= 180,]
 
 Running the same script again would display the following plot
+
 ![](README_files/figure-markdown_strict/unnamed-chunk-8-1.png)
 
 Displaying the pickup longitude and latitude of yellow taxi 2015 on New
@@ -100,18 +99,40 @@ Green taxi 2014
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
+      # draw pickup data on google maps
+      ggmap(get_map("New York",
+                    zoom = 10, scale = "auto",
+                    source = "google"),
+            extent="device",
+            legend="topright"
+      ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+                     data=greenData2014, 
+                     col="red", alpha=0.2
+      ) 
+
     ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
 
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
-
-![](README_files/figure-markdown_strict/unnamed-chunk-10-2.png)
-
-Green taxi 2015
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-11-1.png)
 
+Green taxi 2015
+
+![](README_files/figure-markdown_strict/unnamed-chunk-12-1.png)
+
+      # draw pickup data on google maps
+      ggmap(get_map("New York",
+                    zoom = 10, scale = "auto",
+                    source = "google"),
+            extent="device",
+            legend="topright"
+      ) + geom_point(aes(x=pickup_longitude, y=pickup_latitude), 
+                     data=greenData2015, 
+                     col="red", alpha=0.2
+      )
+
     ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
 
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
-![](README_files/figure-markdown_strict/unnamed-chunk-11-2.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
