@@ -14,7 +14,7 @@ yellowData2015 <- read.csv('./yellow_2015.csv', stringsAsFactors = FALSE)
 greenData2014 <- read.csv('./green_2014.csv', stringsAsFactors = FALSE)
 greenData2015 <- read.csv('./green_2015.csv', stringsAsFactors = FALSE)
 
-visualizeLatLngData <- function (data) {
+visualizeAndCleanPickupLatLngData <- function (data) {
   
   # set ggplot limits
   min_lat <- min(data$pickup_latitude)
@@ -68,12 +68,85 @@ visualizeLatLngData <- function (data) {
                  data=data, 
                  col="red", alpha=0.2
   ) 
+  data
 }
 
-visualizeLatLngData(yellowData2014)
-visualizeLatLngData(yellowData2015)
-visualizeLatLngData(greenData2014)
-visualizeLatLngData(greenData2015)
 
 
+visualizeAndCleanDropoffLatLngData <- function (data) {
+  
+  # set ggplot limits
+  min_lat <- min(data$dropoff_latitude)
+  max_lat <- max(data$dropoff_latitude)
+  min_long <- min(data$dropoff_longitude)
+  max_long <- max(data$dropoff_longitude)
+  
+  plot <- ggplot(data, aes(x=dropoff_longitude, y=dropoff_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  data <- data[data$dropoff_latitude >= -85 & data$dropoff_latitude <= 85,]
+  data <- data[data$dropoff_longitude >= -180 & data$dropoff_longitude <= 180,]
+  
+  #calculate distance to new york lat lng
+  newYorkLatLng = c(-73.935242, 40.730610)
+  data <- data  %>% mutate(
+    distance_from_center = mapply(function(lg, lt) distm(newYorkLatLng, c(lg, lt), fun=distHaversine), dropoff_longitude, dropoff_latitude)/ 1609
+  )
+  
+  #remove all rows with a distance greater than 100 miles
+  data <- data[data$distance_from_center < 100,]
+  
+  #round longitude and latitude with a 4 precision
+  data$dropoff_latitude <-  round(data$dropoff_latitude, 4)
+  data$dropoff_longitude <-  round(data$dropoff_longitude, 4)
+  
+  # set ggplot limits
+  min_lat <- min(data$dropoff_latitude)
+  max_lat <- max(data$dropoff_latitude)
+  min_long <- min(data$dropoff_longitude)
+  max_long <- max(data$dropoff_longitude)
+  
+  plot <- ggplot(data, aes(x=dropoff_longitude, y=dropoff_latitude)) +
+    geom_point(size=0.06) +
+    scale_x_continuous(limits=c(min_long, max_long)) +
+    scale_y_continuous(limits=c(min_lat, max_lat)) 
+  
+  plot
+  
+  # draw pickup data on google maps
+  ggmap(get_map("New York",
+                zoom = 10, scale = "auto",
+                source = "google"),
+        extent="device",
+        legend="topright"
+  ) + geom_point(aes(x=dropoff_longitude, y=dropoff_latitude), 
+                 data=data, 
+                 col="red", alpha=0.2
+  ) 
+  
+  data
+}
+
+
+
+yellowData2014 <- visualizeAndCleanPickupLatLngData(yellowData2014)
+yellowData2015 <- visualizeAndCleanPickupLatLngData(yellowData2015)
+greenData2014 <- visualizeAndCleanPickupLatLngData(greenData2014)
+greenData2015 <- visualizeAndCleanPickupLatLngData(greenData2015)
+
+
+yellowData2014 <- visualizeAndCleanDropoffLatLngData(yellowData2014)
+yellowData2015 <- visualizeAndCleanDropoffLatLngData(yellowData2015)
+greenData2014 <- visualizeAndCleanDropoffLatLngData(greenData2014)
+greenData2015 <- visualizeAndCleanDropoffLatLngData(greenData2015)
+
+
+write.csv(yellowData2014, file = "clean_yellow_2014.csv")
+write.csv(yellowData2015, file = "clean_yellow_2015.csv")
+write.csv(greenData2014, file = "clean_green_2014.csv")
+write.csv(greenData2015, file = "clean_green_2015.csv")
 

@@ -135,3 +135,12 @@ Green taxi 2015
     ## Source : https://maps.googleapis.com/maps/api/geocode/json?address=New+York&key=xxx
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
+
+
+I run the same process on the dropoff latitude and longitude of all four data-sets and write the clean data-sets in four csv files
+
+
+[clean\_yellow\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_yellow_2014.csv)
+[clean\_yellow\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_yellow_2015.csv)
+[clean\_green\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_green_2014.csv)
+[clean\_green\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_green_2015.csv)
