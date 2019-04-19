@@ -10,6 +10,8 @@ library(dplyr)
 library(ggplot2) 
 library(ggmap)
 library(geosphere)
+register_google(key=[key])
+
 ```
 
 ## CLEAN DATA
@@ -66,7 +68,6 @@ Displaying the pickup longitude and latitude of yellow taxi 2014 on New York cit
 
 ```{r}
 
-register_google(key=[key])
 ggmap(get_map("New York",
               zoom = 12, scale = "auto",
               source = "google"),

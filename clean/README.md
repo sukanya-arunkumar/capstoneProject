@@ -49,7 +49,6 @@ all rows with a distance higher than 100miles.
 Displaying the pickup longitude and latitude of yellow taxi 2014 on New
 York city using `ggmap`
 
-    register_google(key=[key])
     ggmap(get_map("New York",
                   zoom = 12, scale = "auto",
                   source = "google"),
