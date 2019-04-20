@@ -136,11 +136,33 @@ Green taxi 2015
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-13-1.png)
 
-
-I run the same process on the dropoff latitude and longitude of all four data-sets and write the clean data-sets in four csv files
-
+I run the same process on the dropoff latitude and longitude of all four
+data-sets and write the clean data-sets in four csv files
 
 [clean\_yellow\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_yellow_2014.csv)
 [clean\_yellow\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_yellow_2015.csv)
 [clean\_green\_2014.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_green_2014.csv)
 [clean\_green\_2015.csv](https://github.com/celinakhalife/capstoneProject/blob/master/clean_green_2015.csv)
+
+WRANGLE DATA
+------------
+
+Extract Date & Time Attributes from pickup\_datetime and
+dropoff\_datetime fields
+
+      data <- data %>% mutate(
+        pickup_year = mapply(function(datetime) as.POSIXlt(datetime)$year+1900 , pickup_datetime),
+        pickup_month = mapply(function(datetime) as.POSIXlt(datetime)$mon+1 , pickup_datetime),
+        pickup_day = mapply(function(datetime) as.POSIXlt(datetime)$mday , pickup_datetime),
+        pickup_hour = mapply(function(datetime) as.POSIXlt(datetime)$hour , pickup_datetime),
+        pickup_minute = mapply(function(datetime) as.POSIXlt(datetime)$min , pickup_datetime)
+      ) 
+
+      data <- data %>% mutate(
+        dropoff_year = mapply(function(datetime) as.POSIXlt(datetime)$year+1900 , dropoff_datetime),
+        dropoff_month = mapply(function(datetime) as.POSIXlt(datetime)$mon+1 , dropoff_datetime),
+        dropoff_day = mapply(function(datetime) as.POSIXlt(datetime)$mday , dropoff_datetime),
+        dropoff_hour = mapply(function(datetime) as.POSIXlt(datetime)$hour , dropoff_datetime),
+        dropoff_minute = mapply(function(datetime) as.POSIXlt(datetime)$min , dropoff_datetime)
+        
+        )
