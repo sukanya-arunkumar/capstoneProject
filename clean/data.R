@@ -4,7 +4,7 @@ library(ggplot2)
 library(ggmap)
 library(geosphere)
 
-register_google(key="AIzaSyDOHYjR93Vi0ols4DpE88pdPOppaO_aShg")
+register_google(key=[key])
 
 
 #load yellow and green datasets
