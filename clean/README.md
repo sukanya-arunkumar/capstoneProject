@@ -197,3 +197,19 @@ that's the case and remove all values above 5miles
       geom_bar()
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-16-1.png)
+
+Displaying the same scatter plot would result in a higher corralaiton
+between `fare_amount` and `trip_distance`
+
+    yellowData2014 <- yellowData2014[yellowData2014$trip_distance < 5,]
+    selectedColumns <- c("pickup_hour",
+                         "fare_amount", "trip_distance")
+    view <- yellowData2014[ ,(names(yellowData2014) %in% selectedColumns)]
+    pairs.panels(view, 
+                 method = "pearson",
+                 hist.col = "#00AFBB",
+                 density = TRUE,
+                 ellipses = TRUE
+    )
+
+![](README_files/figure-markdown_strict/unnamed-chunk-17-1.png)

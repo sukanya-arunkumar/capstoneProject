@@ -11,7 +11,7 @@ library(ggplot2)
 library(ggmap)
 library(geosphere)
 library(psych)
-register_google(key=[key])
+register_google(key="AIzaSyDOHYjR93Vi0ols4DpE88pdPOppaO_aShg")
 
 ```
 
@@ -283,35 +283,4 @@ Extract Date & Time Attributes from pickup_datetime and dropoff_datetime fields
     dropoff_minute = mapply(function(datetime) as.POSIXlt(datetime)$min , dropoff_datetime)
     
     )
-```
-
-## Explore Data
-
-As a first step, I decided to create a scatter plot matrix of `yellowdata2014` containing the three variables `pickup_hour`, `fare_amount` and `trip_distance`
-
-```{r, echo=FALSE}
-yellowData2014 <- read.csv('../clean_yellow_2014.csv', stringsAsFactors = FALSE)
-```
-```{r}
-selectedColumns <- c("pickup_hour",
-                     "fare_amount", "trip_distance")
-view <- yellowData2014[ ,(names(yellowData2014) %in% selectedColumns)]
-pairs.panels(view, 
-             method = "pearson",
-             hist.col = "#00AFBB",
-             density = TRUE,
-             ellipses = TRUE
-)
-```
-
-It's clear that there's a correlation between `fare_amount` and `trip_distance` and that `trip_distance` is usually below 5miles.
-
-I decided to create a bar histogram of the `trip_distance` to make sure that's the case and remove all values above 5miles
-
-```{r}
-
-ggplot(yellowData2014, aes(x=trip_distance)) +
-  xlim(min(yellowData2014$trip_distance), max(yellowData2014$trip_distance)) +
-  geom_bar()
-
 ```
