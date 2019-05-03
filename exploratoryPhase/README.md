@@ -9,7 +9,8 @@ I wanted to visualize the density of the `trip_distance`, I used
     taxiData <-
       read.csv('../clean_yellow_green_data.csv', stringsAsFactors = FALSE)
 
-    threshold <- quantile(taxiData$trip_distance, probs=0.9)
+    fit <- fitdistr(taxiData$trip_distance, densfun="lognormal")
+    threshold <- qlnorm(p=0.9, meanlog = fit$estimate[1], sdlog = fit$estimate[2], lower.tail = TRUE, log.p = FALSE)
 
     ggplot(taxiData, aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) +
       xlim(min(taxiData$trip_distance),max(taxiData$trip_distance)) +
@@ -20,8 +21,8 @@ I wanted to visualize the density of the `trip_distance`, I used
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-The trip distance threshold is 3.8 miles I decided to create a discrete
-modal with the new trip distance threshold
+The trip distance threshold is 3.7869182 miles I decided to create a
+discrete modal with the new trip distance threshold
 
     distance_type_label <- c('TRUE' = paste('Trip Distance > ', threshold), 'FALSE' = paste('Trip Distance <= ', threshold))
     ggplot(transform(taxiData,
@@ -38,7 +39,8 @@ Running the same logic on `fare_amount` values
     taxiData <-
       read.csv('../clean_yellow_green_data.csv', stringsAsFactors = FALSE)
 
-    threshold <- quantile(taxiData$fare_amount, probs=0.9)
+    fit <- fitdistr(taxiData$fare_amount, densfun="lognormal")
+    threshold <- qlnorm(p=0.9, meanlog = fit$estimate[1], sdlog = fit$estimate[2], lower.tail = TRUE, log.p = FALSE)
 
     ggplot(taxiData, aes(x=fare_amount, fill=taxi_color, alpha=I(0.4))) +
       xlim(min(taxiData$fare_amount),max(taxiData$fare_amount)) +
