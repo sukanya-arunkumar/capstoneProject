@@ -11,9 +11,9 @@ I wanted to visualize the density of the `trip_distance`, I used
 
     threshold <- quantile(taxiData$trip_distance, probs=0.9)
 
-    ggplot(taxiData, aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) + 
+    ggplot(taxiData, aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) +
       xlim(min(taxiData$trip_distance),max(taxiData$trip_distance)) +
-      geom_density() + 
+      geom_density() +
       geom_vline(xintercept=threshold) +
       scale_fill_manual(values=c("#006600", "#e5e500")) +
       labs(fill = 'Taxi Color', x = 'Trip Distance (in miles)', y = 'Density')
@@ -25,8 +25,8 @@ modal with the new trip distance threshold
 
     distance_type_label <- c('TRUE' = paste('Trip Distance > ', threshold), 'FALSE' = paste('Trip Distance <= ', threshold))
     ggplot(transform(taxiData,
-                     long_distance = trip_distance > threshold), aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) + 
-      geom_density() + 
+                     long_distance = trip_distance > threshold), aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) +
+      geom_density() +
       scale_fill_manual(values=c("#006600", "#e5e500")) +
       facet_grid (~long_distance,scales = "free", labeller=as_labeller(distance_type_label)) +
       labs(fill = 'Taxi Color', x = 'Trip Distance (in miles)', y = 'Density')
@@ -40,9 +40,9 @@ Running the same logic on `fare_amount` values
 
     threshold <- quantile(taxiData$fare_amount, probs=0.9)
 
-    ggplot(taxiData, aes(x=fare_amount, fill=taxi_color, alpha=I(0.4))) + 
+    ggplot(taxiData, aes(x=fare_amount, fill=taxi_color, alpha=I(0.4))) +
       xlim(min(taxiData$fare_amount),max(taxiData$fare_amount)) +
-      geom_density() + 
+      geom_density() +
       geom_vline(xintercept=threshold) +
       scale_fill_manual(values=c("#006600", "#e5e500")) +
       labs(fill = 'Taxi Color', x = 'Trip Distance (in miles)', y = 'Density')
@@ -53,8 +53,8 @@ Running the same logic on `fare_amount` values
 
     amount_type_label <- c('TRUE' = paste('Fare Amount > ', threshold), 'FALSE' = paste('Fare Amount <= ', threshold))
     ggplot(transform(taxiData,
-                     long_distance = trip_distance > threshold), aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) + 
-      geom_density() + 
+                     long_distance = trip_distance > threshold), aes(x=trip_distance, fill=taxi_color, alpha=I(0.4))) +
+      geom_density() +
       scale_fill_manual(values=c("#006600", "#e5e500")) +
       facet_grid (~long_distance,scales = "free", labeller=as_labeller(amount_type_label)) +
       labs(fill = 'Taxi Color', x = 'Fare Amount', y = 'Density')
@@ -81,11 +81,11 @@ provided by
                          source = "google"),
                  extent="device",
                  legend="topright"
-    )+ geom_point(aes(x=pickup_longitude, y=pickup_latitude, color=taxi_color), 
-                  data=taxiData, 
-                   alpha=0.2
-    )  + 
-      geom_polygon(data = shp, aes(x = long, y = lat, group = group), colour = "black", fill = NA) 
+    )+ geom_point(aes(x=pickup_longitude, y=pickup_latitude, color=taxi_color),
+                  data=taxiData,
+                   alpha=I(0.2)
+    )  +
+      geom_polygon(data = shp, aes(x = long, y = lat, group = group), color = "black", fill = NA)
 
     ## Source : https://maps.googleapis.com/maps/api/staticmap?center=New%20York&zoom=10&size=640x640&scale=2&maptype=terrain&language=en-EN&key=xxx
 
@@ -97,9 +97,9 @@ provided by
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-5-1.png)
 
-I layed the pickup location projections over the neighberhoods shapes
-and retreived the neighberhood name and code. I created the same
-previous plot with neighberhood color indexes
+I projected the pickup location over the neighborhoods shapes and
+retrieved the neighborhood name and code. I created the same previous
+plot with neighborhood color indexes
 
     spacialTaxiData <- taxiData
     coordinates(spacialTaxiData)=~pickup_longitude+pickup_latitude
@@ -110,40 +110,40 @@ previous plot with neighberhood color indexes
     taxiData$ntaname <- unlist(spacialTaxiData$nhoodID['ntaname'])
     taxiData$ntacode <- unlist(spacialTaxiData$nhoodID['ntacode'])
 
-    ggplot(taxiData, aes(x=pickup_longitude, y=pickup_latitude)) + 
-      geom_point(aes(color=ntacode, alpha=0.2))+ theme(legend.position = "none")  + 
-      geom_polygon(data = shp, aes(x = long, y = lat, group = group), colour = "black", fill = NA) +
-      labs(x = 'Longitude', y = 'Latitude') 
+    ggplot(taxiData, aes(x=pickup_longitude, y=pickup_latitude)) +
+      geom_point(aes(color=ntacode, alpha=I(0.2)))+ theme(legend.position = "none")  +
+      geom_polygon(data = shp, aes(x = long, y = lat, group = group), color = "black", fill = NA) +
+      labs(x = 'Longitude', y = 'Latitude')
 
     ## Regions defined for each Polygons
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-6-1.png)
 
-Summary extracted from the neighberhood data
+Summary extracted from the neighborhood data
 
-Highest 15 neighberhoods
+Highest 15 neighborhoods
 
     nhoodSummary <- taxiData %>% group_by(ntacode) %>%
       summarise(count=n())
     colnames(nhoodSummary) <- c("ntacode", "value")
 
-    first15NH <- nhoodSummary %>% arrange(desc(value)) %>% head(15) 
+    first15NH <- nhoodSummary %>% arrange(desc(value)) %>% head(15)
     d <- taxiData[taxiData$ntacode %in% first15NH$ntacode,]
 
-    ggplot(d, aes(x=ntacode, fill=taxi_color, alpha=0.4)) +
-      geom_bar() + 
-      labs(x = 'Neighberhood Code', y = 'Trips Density', fill = 'Taxi Color') +
+    ggplot(d, aes(x=ntacode, fill=taxi_color, alpha=I(0.4))) +
+      geom_bar() +
+      labs(x = 'Neighborhood Code', y = 'Trips Density', fill = 'Taxi Color') +
       scale_fill_manual(values=c("#006600", "#e5e500"))
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-7-1.png)
 
 Lowest 15 neighberhoods
 
-    last15NH <- nhoodSummary %>% arrange(value) %>% head(15) 
+    last15NH <- nhoodSummary %>% arrange(value) %>% head(15)
     d <- taxiData[taxiData$ntacode %in% last15NH$ntacode,]
 
-    ggplot(d, aes(x=ntacode, fill=taxi_color, alpha=0.4)) +
-      geom_bar() + 
+    ggplot(d, aes(x=ntacode, fill=taxi_color, alpha=I(0.4))) +
+      geom_bar() +
       labs(x = 'Neighberhood Code', y = 'Trips Density', fill = 'Taxi Color') +
       scale_fill_manual(values=c("#006600", "#e5e500"))
 
